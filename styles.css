@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Press Start 2P');
+
+body {
+  background-color: black;
+}
+
+#myCanvas {
+  display: flex;
+  justify-content: center;
+  width: 99%;
+  height: 98%;
+}
+/* Full-bleed responsive canvas */
+html, body, #myCanvas { width:100%; height:100%; }
+#myCanvas { position:fixed; left:0; top:0; image-rendering: pixelated; }
