@@ -30,3 +30,23 @@ addEventListener('touchstart', (() => {
   let done=false;
   return () => { if (done) return; done=true; const kd=new KeyboardEvent('keydown',{key:'Enter',code:'Enter',bubbles:true}); document.dispatchEvent(kd); };
 })(), { once:true, passive:true });
+
+// START button -> Enter
+document.querySelectorAll('#hud .btn').forEach(btn => {
+  if (btn.dataset.k === 'enter') {
+    btn.addEventListener('touchstart', e => { e.preventDefault(); fire('Enter','keydown'); }, { passive:false });
+    btn.addEventListener('touchend',   e => { e.preventDefault(); fire('Enter','keyup');   }, { passive:false });
+  }
+});
+
+// Sometimes the game needs Enter twice (title -> character, then character -> game).
+// On the very first touch, send two Enters spaced out slightly.
+addEventListener('touchstart', (() => {
+  let done=false;
+  return () => {
+    if (done) return;
+    done = true;
+    setTimeout(() => { fire('Enter','keydown'); fire('Enter','keyup'); }, 0);
+    setTimeout(() => { fire('Enter','keydown'); fire('Enter','keyup'); }, 150);
+  };
+})(), { once:true, passive:true });
