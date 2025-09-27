@@ -14,8 +14,15 @@ fitCanvas();
 
 // Synthesize keyboard events so game code doesn't change
 function fire(key, type='keydown'){
-  const code = key === ' ' || key === 'space' ? 'Space' : key.toUpperCase();
-  const evt = new KeyboardEvent(type, { key: key === 'space' ? ' ' : key, code, bubbles: true, cancelable: true });
+  // Normalize key and code
+  let k = key;
+  let code = '';
+  if (k === ' ' || k === 'space') { k = ' '; code = 'Space'; }
+  else if (/^enter$/i.test(k)) { k = 'Enter'; code = 'Enter'; }
+  else if (/^[wasd]$/i.test(k)) { k = k.toLowerCase(); code = 'Key' + k.toUpperCase(); }
+  else if (/^[a-z]$/i.test(k)) { k = k.toLowerCase(); code = 'Key' + k.toUpperCase(); }
+  else { code = k; }
+  const evt = new KeyboardEvent(type, { key: k, code, bubbles: true, cancelable: true });
   document.dispatchEvent(evt); window.dispatchEvent(evt);
 }
 
@@ -48,5 +55,35 @@ addEventListener('touchstart', (() => {
     done = true;
     setTimeout(() => { fire('Enter','keydown'); fire('Enter','keyup'); }, 0);
     setTimeout(() => { fire('Enter','keydown'); fire('Enter','keyup'); }, 150);
+  };
+})(), { once:true, passive:true });
+
+
+const startOverlay = document.getElementById('startOverlay');
+const btnStart = document.getElementById('btnStart');
+
+function advanceGameFlow(){
+  // invia due Enter per: title -> character, character -> game
+  fire('Enter','keydown'); fire('Enter','keyup');
+  setTimeout(()=>{ fire('Enter','keydown'); fire('Enter','keyup'); }, 150);
+}
+
+if (btnStart){
+  btnStart.addEventListener('click', (e)=>{
+    e.preventDefault();
+    advanceGameFlow();
+    // nascondi overlay dopo avvio
+    if (startOverlay) startOverlay.style.display = 'none';
+  });
+}
+
+// anche il primo tap ovunque avvia
+addEventListener('touchstart', (()=>{
+  let done=false;
+  return (e)=>{
+    if (done) return;
+    done = true;
+    advanceGameFlow();
+    if (startOverlay) startOverlay.style.display = 'none';
   };
 })(), { once:true, passive:true });
