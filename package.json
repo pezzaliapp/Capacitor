@@ -1,0 +1,22 @@
+{
+  "name": "donkeykong-capacitor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Donkey Kong HTML5 canvas game wrapped with Capacitor for iOS/Android.",
+  "scripts": {
+    "dev": "npx http-server ./www -c-1 -p 5173",
+    "build": "echo 'No build step. Files served from ./www'",
+    "cap:sync": "npx cap sync",
+    "ios": "npx cap open ios",
+    "android": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/ios": "^6.2.0",
+    "@capacitor/android": "^6.2.0",
+    "http-server": "^14.1.1"
+  }
+}
